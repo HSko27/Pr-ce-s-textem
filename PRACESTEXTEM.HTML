@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manipulace s textem</title>
+  </head>
+  <body>
+    <div class=" flex-col " style="margin-left: 70vh; margin-top: 10%;">
+      <div class="bg-stone-400 rounded w-96">
+        <h1 class="text-center">Manipulace s textem</h1>
+        <label for="vstupTextu">Zadejte text:</label>
+        <input
+          class="border mt-5 text-center rounded"
+          id="vstupTextu"
+          type="text"
+        />
+        <br />
+        <label for="hledanyText">Hledat text:</label>
+        <input
+          class="border text-center mt-5 rounded"
+          id="hledanyText"
+          type="text"
+        />
+        <button class="rounded bg-stone-700 text-white" id="tlacitkoHledani">
+          Hledat pozice
+        </button>
+        <br />
+        <label for="vstupSlova">slovo:</label>
+        <input class="border mt-5 rounded mb-5" id="vstupSlova" type="text" />
+        <button
+          class="rounded bg-stone-700 text-white"
+          id="tlacitkoPocitaniVyskytu"
+        >
+          Počítat výskyty
+        </button>
+        <br />
+        <label for="vstupNahrazeni">Nahradit:</label>
+        <input
+          class="border mt-5 rounded"
+          id="vstupNahrazeni"
+          type="text"
+          placeholder="Zadejte písmena nebo slova k nahrazení"
+        />
+        <br />
+        <label for="vstupNahrazujici">Za:</label>
+        <input
+          class="border mt-5 rounded"
+          id="vstupNahrazujici"
+          type="text"
+          placeholder="Zadejte písmena nebo slova k nahrazení"
+        />
+        <button class="rounded bg-stone-700 text-white" id="tlacitkoNahrazeni">
+          Nahradit
+        </button>
+
+        <p class="mt-5" id="vysledek">...</p>
+      </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Hledání pozic
+      document.getElementById("tlacitkoHledani").onclick = function () {
+        var vstupTextu = document.getElementById("vstupTextu").value;
+
+        if (hledanyText.trim() === "") {
+          alert("Prosím, zadejte text k hledání.");
+          return;
+        }
+
+        var pozice = [];
+        var index = vstupTextu.indexOf(hledanyText);
+
+        while (index !== -1) {
+          pozice.push(index);
+          index = vstupTextu.indexOf(hledanyText, index + 1);
+        }
+
+        document.getElementById("vysledek").innerHTML =
+          "Pozice '" +
+          hledanyText +
+          "' ve textu: " +
+          (pozice.length > 0 ? pozice.join(", ") : "Nenalezeno.");
+      };
+
+      document.getElementById("tlacitkoPocitaniVyskytu").onclick = function () {
+        var vstupTextu = document.getElementById("vstupTextu").value;
+        var vstupSlova = document.getElementById("vstupSlova").value;
+
+        if (vstupSlova.trim() === "") {
+          alert("Prosím, zadejte slovo.");
+          return;
+        }
+
+        var cistyText = vstupTextu
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+          .toLowerCase();
+        var cisteSlovo = vstupSlova.toLowerCase();
+
+        var slova = cistyText.split(" ");
+
+        var vyskyty = 0;
+        for (var i = 0; i < slova.length; i++) {
+          if (slova[i] === cisteSlovo) {
+            vyskyty++;
+          }
+        }
+
+        // Zobrazení výsledku
+        document.getElementById("vysledek").innerHTML =
+          "Slovo '" + vstupSlova + "' se vyskytuje " + vyskyty + "krát.";
+      };
+
+      document.getElementById("tlacitkoNahrazeni").onclick = function () {
+        var vstupTextu = document.getElementById("vstupTextu").value;
+        var vstupNahrazeni = document.getElementById("vstupNahrazeni").value;
+        var vstupNahrazujici =
+          document.getElementById("vstupNahrazujici").value;
+
+        if (vstupNahrazeni.trim() === "") {
+          alert("Prosím, zadejte písmena nebo slova k nahrazení.");
+          return;
+        }
+
+        // Rozdělení textu na slova
+        var slova = vstupTextu.split(" ");
+
+        for (var i = 0; i < slova.length; i++) {
+          slova[i] = slova[i].replace(
+            new RegExp(vstupNahrazeni, "gi"),
+            vstupNahrazujici
+          );
+        }
+
+        // Zobrazení upraveného textu
+        document.getElementById("vysledek").innerHTML = slova.join(" ");
+      };
+    </script>
+  </body>
+</html>
